@@ -49,3 +49,17 @@ def load():
             return redirect(url_for('sessions.index'))
 
     return render_template('sessions/load.html')
+
+
+
+@bp.route('/<session_id>/inspect', methods=('GET', 'POST'))
+@login_required
+def inspect(session_id):
+    # TODO: 1. check with database whether id exists
+    #       2. would be nice to store trial names and ids in database on first request instead of
+    #           having two api calls.
+
+
+    json = get_session_json(session_id)
+    trials = json["trials"]
+    return render_template('trials/t_index.html', trials=trials)
