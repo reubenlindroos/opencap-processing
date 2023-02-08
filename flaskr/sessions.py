@@ -6,6 +6,7 @@ from werkzeug.exceptions import abort
 from flaskr.auth import login_required
 from flaskr.db import get_db
 from utils import get_session_json
+import os
 
 bp = Blueprint('sessions', __name__)
 
@@ -60,6 +61,31 @@ def inspect(session_id):
     #           having two api calls.
 
 
-    json = get_session_json(session_id)
-    trials = json["trials"]
+    # filthy hack instead of a proper database
+    json_path = session_id + ".json"
+    import json
+
+    if json_path in os.listdir(os.curdir):
+        with open(json_path) as ifile:
+            data = json.load(ifile)
+    else:
+        data = get_session_json(session_id)
+
+    trials = data["trials"]
     return render_template('trials/t_index.html', trials=trials)
+
+@bp.route('/<trial_name>/show_videos')
+@login_required
+def show_videos(trial_name):
+    trial_path = os.path.join("Videos","160780df-d8c1-4fe9-af56-2219693ea48d",trial_name)
+    videos = []
+    for item in os.listdir(trial_path):
+        if os.path.isdir(os.path.join(trial_path,item)):
+            videos.extend(os.listdir(os.path.join(trial_path,item)))
+        else:
+            videos.append(os.path.join(trial_path,item))
+            return render_template("trials/videos.html",videos=videos)
+@bp.route('/display/<filename>')
+def display_video(filename):
+
+	return redirect(url_for('static', filename= filename), code=301)

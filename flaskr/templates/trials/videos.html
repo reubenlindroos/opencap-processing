@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{%  block content %}
+{%  for video in videos %}
+<div style="margin: 10px auto;">
+		<video controls="controls" preload="preload">
+			<source src="{{ url_for('sessions.display_video', filename=video) }}" type="video/mp4"></source>
+		</video>
+	</div>
+{%  endfor %}
+{%  endblock %}

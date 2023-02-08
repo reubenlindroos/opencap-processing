@@ -8,9 +8,9 @@
           <h1>{{ trial['name'] }}</h1>
           <div class="about"> on {{ trial['created_at'] }}</div>
         </div>
-{#        {% if g.user['id'] == post['author_id'] %}#}
-{#          <a class="action" href="{{ url_for('sessions.inspect', session_id=post['session_id']) }}">Inspect</a>#}
-{#        {% endif %}#}
+
+          <a class="action" href="{{ url_for('sessions.show_videos', trial_name = trial['name']) }}">Inspect</a>
+
       </header>
       <p class="body">{{ trial['status'] }}</p>
     </article>
